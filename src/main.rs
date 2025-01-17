@@ -1,11 +1,19 @@
-use image::{DynamicImage, GenericImageView, ImageBuffer, RgbImage, Pixel};
-use std::path::Path;
+use image::{*};
 
 fn main() {
-    let img_path = Path::new("image.png");
+    let img_path = "image.png";
     
-    let img = image::open(&img_path).expect("Erreur lors de l'ouvertre de l'image");
-    let pixel = img.get_pixel(32, 52);
+    let img = image::open(img_path).expect("Erreur lors de l'ouvertre de l'image");
 
-    println!("La couleur du pixel (32, 52) est : {:?}", pixel.to_rgb());
+    let mut img = img.to_rgba8();
+
+    for (x, y, pixel) in img.enumerate_pixels_mut() {
+        if (x + y) % 2 == 0 {
+            *pixel = Rgba([255, 255, 255, 255]);
+        }
+    }
+
+    img.save("question_5.png").expect("Erreur");
+
+    println!("Image modifiée et sauvegardée avec succès !");
 }
